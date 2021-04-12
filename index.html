@@ -2,39 +2,44 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link href="css/bootstrap-4.3.1/bootstrap.min.css" rel="stylesheet"/>
-<link href="css/leaflet.min.css" rel="stylesheet"/>
-<link href="css/ivm.css" rel="stylesheet"/>
+<link href="css/libs/bootstrap-4.3.1/bootstrap.min.css" rel="stylesheet"/>
+<link href="css/libs/leaflet.min.css" rel="stylesheet"/>
+<link href="css/main.css" rel="stylesheet"/>
 
 <title>IVM COVID</title>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 menu-bar">
                 Menu bar
             </div>
         </div>
         <div class="row">
-            <div class="col-4">
+            <div class="col-5 tree-view">
                 árvore de indicadores
             </div>
-            <div class="col-8">
-                <div id="map" style="width: 100%; height: 780px;"></div>
+            <div class="col-7">
+                <div id="mainmap"></div>
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 detail">
                 Detalhes dos indicadores
             </div>
         </div>
 
     </div>
 
-    <!-- map -->
-  
-  <script src="js/jquery-3.6.0.min.js"></script>
-  <script src="js/leaflet-1.7.1-min.js"></script>
-  <script src="js/ivm.js"></script>
+    <script src="js/libs/jquery-3.6.0.min.js"></script>
+    <script src="js/libs/bootstrap-4.3.1/bootstrap.min.js"></script>
+    <script src="js/libs/leaflet-1.7.1-min.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/start-map.js"></script>
+    <script src="js/load-data.js"></script>
+    
+    
 </body>
 </html>
