@@ -1,6 +1,6 @@
 {
     "dataversion":"v1.0.0-beta",
-    "key":"ivm-covid-19",
+    "key":"IVM-COVID-19",
     "description":"Índice de Vulnerabilidade Metropolitana à COVID-19",
     "dimensions":[
         {
