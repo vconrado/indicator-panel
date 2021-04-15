@@ -1,6 +1,11 @@
+/**
+ * Build the map componente based on Leaflet.
+ */
 var mainMap={
-    map:null,
-    geojson:null,
+    map:null,// reference to leaflet map component
+    geojson:null,// reference to geojson raw data loaded from file
+    mainLayer: null,// reference to main leaflet layer based on geojson raw data.
+    info:L.control(),
 
     init:()=>{
         mainMap.map = L.map('mainmap').setView([-23, -45], 8);
@@ -20,35 +25,47 @@ var mainMap={
         mainMap.addLegend();
     },
 
+    /**
+     * Update the indicator value in the geojson data and recreate the Layer.
+     * @param {Array} values, An array with the geocode and new values for the "indicator" attribute
+     */
+    updateMainLayer:(csv)=>{
+        mainMap.geojson.features.forEach(
+            (f)=>{
+                let geocode=f.properties["gc"];
+                f.properties["indicator"]=csv.values[geocode];
+            }
+        );
+        mainMap.renewMainLayer(mainMap.geojson);
+    },
+
     // control that shows state info on hover
     addInfoControl:()=>{
-        var info = L.control();
-
-        info.onAdd = function (map) {
+        mainMap.info.onAdd = function (map) {
             this._div = L.DomUtil.create('div', 'info');
             this.update();
             return this._div;
         };
 
-        info.update = function (props) {
+        mainMap.info.update = function (props) {
             this._div.innerHTML = '<h4>Índice de Vulnerabilidade Metropolitana à COVID-19</h4>' +  (props ?
-                '<b>' + props.nm + '</b><br />' + props.density + 'índice (entre 0 e 1)'
+                '<b>' + props.nm + '</b><br />' + props.indicator + ' índice (entre 0 e 1)'
                 : 'passe o mause sobre os município');
         };
 
-        info.addTo(mainMap.map);
+        mainMap.info.addTo(mainMap.map);
     },
 
 
-    // get color depending on population density value
+    // get color depending on population indicator value
     getColor:(d)=>{
-        return d > 1000 ? '#800026' :
-                d > 500  ? '#BD0026' :
-                d > 200  ? '#E31A1C' :
-                d > 100  ? '#FC4E2A' :
-                d > 50   ? '#FD8D3C' :
-                d > 20   ? '#FEB24C' :
-                d > 10   ? '#FED976' :
+        return d > 0.8 ? '#800026' :
+                d > 0.7  ? '#BD0026' :
+                d > 0.6  ? '#E31A1C' :
+                d > 0.5  ? '#FC4E2A' :
+                d > 0.4  ? '#FD8D3C' :
+                d > 0.3  ? '#FEB24C' :
+                d > 0.1  ? '#FED976' :
                             '#FFEDA0';
     },
 
@@ -59,7 +76,7 @@ var mainMap={
             color: 'white',
             dashArray: '3',
             fillOpacity: 0.7,
-            fillColor: mainMap.getColor(feature.properties.density)
+            fillColor: mainMap.getColor(feature.properties.indicator)
         };
     },
 
@@ -77,12 +94,12 @@ var mainMap={
             layer.bringToFront();
         }
 
-        info.update(layer.feature.properties);
+        mainMap.info.update(layer.feature.properties);
     },
 
     resetHighlight:(e)=>{
-        mainMap.geojson.resetStyle(e.target);
-        info.update();
+        mainMap.mainLayer.resetStyle(e.target);
+        mainMap.info.update();
     },
 
     zoomToFeature:(e)=>{
@@ -100,7 +117,12 @@ var mainMap={
     loadGeojson: async ()=>{
         const response = await fetch("data/rm-vale.geojson");
         const data = await response.json();
-        mainMap.geojson = L.geoJson(data, {
+        mainMap.geojson = data;
+        mainMap.renewMainLayer(data);
+    },
+
+    renewMainLayer: (data)=>{
+        mainMap.mainLayer = L.geoJson(data, {
             style: mainMap.style,
             onEachFeature: mainMap.onEachFeature
         }).addTo(mainMap.map);
@@ -116,7 +138,7 @@ var mainMap={
         legend.onAdd = function (map) {
 
             var div = L.DomUtil.create('div', 'info legend'),
-                grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+                grades = [0, 0.1, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
                 labels = [],
                 from, to;
 
@@ -125,7 +147,7 @@ var mainMap={
                 to = grades[i + 1];
 
                 labels.push(
-                    '<i style="background:' + mainMap.getColor(from + 1) + '"></i> ' +
+                    '<i style="background:' + mainMap.getColor(from + 0.01) + '"></i> ' +
                     from + (to ? '&ndash;' + to : '+'));
             }
 
