@@ -2,37 +2,40 @@
  * Using the appropriate data model to guide the loading of CSV data.
  */
 var dataLoader={
-    filePath:"ivm_rmvale.json",// path to the data model file
+    modelFilePath:"ivm_rmvale.json",// path to the data model file
     dataModel:{},
     data:[],// store the type {key:"",values:[]}
 
-    loadData:(key, callbackfn)=>{
-        d3.csv("data/"+key+".csv").then(
-            (data, error)=>{
-                if (error) throw error;
-                try {
-                    dataLoader.data.push({key:key,values:dataLoader.processCSV(data)});   
-                } catch (error) {
-                    console.error(error+"\nCSV data file format error for ("+key+".csv)");
-                }
-                callbackfn();
-            }
-        );
+    init:async ()=>{
+        let data=await dataLoader.loadAllData();
+        return data;
     },
 
-    loadDataModel:(callbackfn)=>{
-        d3.json("model/"+dataLoader.filePath).then(
+    loadCSVFile: async (key)=>{
+        let d;
+        await d3.csv("data/"+key+".csv").then(
             (data, error)=>{
                 if (error) throw error;
-                dataLoader.dataModel=data;
-                if(callbackfn) callbackfn();
+                d=data;
             }
         );
+        return d;
     },
 
-    processCSV:(csv)=>{
+    loadDataModel: async ()=>{
+        let dm;
+        await d3.json("model/"+dataLoader.modelFilePath).then(
+            (data, error)=>{
+                if (error) throw error;
+                dm=data;
+            }
+        );
+        return dm;
+    },
+
+    csvToJs: async(csv)=>{
         let data = [];
-        csv.forEach(
+        await csv.forEach(
             (d)=>{
                 if(d["geocode"] && d["value"])
                     data[d["geocode"]]=parseFloat(d["value"].replace(",","."));
@@ -43,20 +46,41 @@ var dataLoader={
         return data;
     },
 
-    getAllData:()=>{
-        dataLoader.loadDataModel(
-            ()=>{
-                dataLoader.getAllKeys(dataLoader.dataModel).forEach(
-                    (key)=>{
-                        dataLoader.loadData(key,
-                            ()=>{
-                                console.log("data file is loaded for key:"+key);
-                            }
-                        );
-                    }
-                );
+    loadAllData: async ()=>{
+        let keys=[];
+        await dataLoader.loadDataModel().then(
+            (dm)=>{
+                keys=dataLoader.getAllKeys(dm);
             }
         );
+
+        let allData=[];
+        let dataPromises=[];
+        keys.forEach(
+            (key)=>{
+                const dataPromise = new Promise((resolve, reject) => {
+                    dataLoader.loadCSVFile(key).then(
+                        (csv)=>{
+                            try {
+                                dataLoader.csvToJs(csv).then(
+                                    (d)=>{
+                                        resolve({key:key,values:d});
+                                    }
+                                );
+                            } catch (error) {
+                                console.error(error+"\nCSV data file format error for ("+key+".csv)");
+                                reject();
+                            }
+                        }
+                    );
+                });
+                dataPromises.push(dataPromise);
+            }
+        );
+        await Promise.all(dataPromises).then((d) => {
+            allData.push(d);
+        });
+        return allData;
     },
 
     getAllKeys: (obj, parentKey)=>{
