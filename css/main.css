@@ -1,6 +1,6 @@
 /** map */
 #mainmap {
-    background-color: #badadb;
+    background-color: #edffc9;
     width: 100%;
     padding: 6px;
 }
@@ -10,19 +10,19 @@
 
 /** Menu bar */
 .menu-bar{
-    background-color: cadetblue;
+    background-color: #cddab2;
     height: 55px;
 }
 
 /** Tree view */
-.tree-view{
-    background-color: cornsilk;
+#treeview{
+    background-color: #edffc9;
     padding: 6px;
 }
 
 /** Detail area */
 .detail{
-    background-color: #fff8dd;
+    background-color: #edffc9;
     padding: 6px;
     border-top: 1px solid black;
 }
