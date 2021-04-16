@@ -5,6 +5,7 @@
 <link href="css/libs/bootstrap-4.3.1/bootstrap.min.css" rel="stylesheet"/>
 <link href="css/libs/leaflet.min.css" rel="stylesheet"/>
 <link href="css/main.css" rel="stylesheet"/>
+<link href="css/tree.css" rel="stylesheet"/>
 
 <title>IVM COVID</title>
 </head>
@@ -16,8 +17,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-5 tree-view">
-                árvore de indicadores
+            <div id="treeview" class="col-5">
             </div>
             <div class="col-7">
                 <div id="mainmap"></div>
@@ -34,6 +34,10 @@
     <script src="js/libs/jquery-3.6.0.min.js"></script>
     <script src="js/libs/bootstrap-4.3.1/bootstrap.min.js"></script>
     <script src="js/libs/leaflet-1.7.1-min.js"></script>
+    
+    <script src="js/libs/d3v3/d3.min.js"></script>
+
+    <!-- com v5 trabalha com Promise, o then funciona em d3.json().then() -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
     <script src="js/utils.js"></script>
@@ -41,6 +45,7 @@
     <script src="js/start-map.js"></script>
     <script src="js/load-data.js"></script>
     
+    <script src="js/tree.js"></script>
     
 </body>
 </html>
