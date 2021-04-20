@@ -1,8 +1,18 @@
+/** general definitions */
+div.row{
+    padding: 10px;
+    background-color: #fafbfc;
+}
+
 /** map */
 #mainmap {
-    background-color: #edffc9;
+    background-color: #fafbfc;
     width: 100%;
     padding: 6px;
+}
+.mm-col{
+    padding-right: 0;
+    padding-left: 0;;
 }
 
 .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
@@ -10,19 +20,22 @@
 
 /** Menu bar */
 .menu-bar{
-    background-color: #cddab2;
+    background-color: #24292e;
     height: 55px;
+    color: white;
+    padding: calc(0.6%);
+}
+.mb-row{
+    padding: 0px !important;
 }
 
 /** Tree view */
-#treeview{
-    background-color: #edffc9;
-    padding: 6px;
-}
+/* #treeview{
+    background-color: #f5f6f7;
+} */
 
 /** Detail area */
 .detail{
-    background-color: #edffc9;
-    padding: 6px;
-    border-top: 1px solid black;
+    padding: 10px;
+    border-top: 1px solid #c8c8c8;
 }
