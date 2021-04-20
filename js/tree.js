@@ -1,26 +1,30 @@
 var treeview = {
 
     jsonEntryData: null,
+    selectedNode: null,
 
-    makeJsonEntryData:(d)=>{
-        treeview.jsonEntryData=treeview.nodesFromModel(d);
+    makeJsonEntryData: (d) => {
+        treeview.jsonEntryData = treeview.nodesFromModel(d);
         return treeview;
     },
 
-    nodesFromModel: (obj)=>{
-        let node = {"name":"", "children":[]};
-        for(let prop in obj){
-            if(Object.prototype.toString.call(obj[prop])=="[object Array]" && obj[prop].length) {
+    nodesFromModel: (obj) => {
+        let node = { "key": "", "children": [] };
+        for (let prop in obj) {
+            if (Object.prototype.toString.call(obj[prop]) == "[object Array]" && obj[prop].length) {
                 obj[prop].forEach(element => {
                     node["children"].push(treeview.nodesFromModel(element));
                 });
-            }else{
-                if (prop=="key") {
-                    node["name"]=obj[prop];
+            } else {
+                if (prop == "key") {
+                    node["key"] = obj[prop];
+                }
+                if (prop == "description") {
+                    node["description"] = obj[prop];
                 }
             }
         }
-        if(!node["children"].length) delete node.children;
+        if (!node["children"].length) delete node.children;
         return node;
     },
 
@@ -73,6 +77,9 @@ var treeview = {
 
     update: (source) => {
 
+        // store selected node
+        treeview.selectedNode = ((source.depth > 1) ? (source.parent.key + "-") : ("")) + source.key;
+
         // Compute the new tree layout.
         var nodes = treeview.tree.nodes(treeview.root).reverse(),
             links = treeview.tree.links(nodes);
@@ -94,11 +101,14 @@ var treeview = {
             .attr("r", 1e-6)
             .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
 
+        nodeEnter.append("title")
+            .text(function (d) { return d.description; });
+
         nodeEnter.append("text")
             .attr("x", function (d) { return d.children || d._children ? -10 : 10; })
             .attr("dy", ".35em")
             .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
-            .text(function (d) { return d.name; })
+            .text(function (d) { return d.key; })
             .style("fill-opacity", 1e-6);
 
         // Transition nodes to their new position.
