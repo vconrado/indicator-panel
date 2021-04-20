@@ -5,13 +5,15 @@ $(document).ready(()=>{
     dataLoader.init().then(
         (d)=>{
             mainMap.updateMainLayer(d[0][0]);
+            // start TreeView
+            treeview
+                .makeJsonEntryData(dataLoader.dataModel)
+                .display();
         }
     );
-
-    treeview.init();
 });
 
 $(window).on('resize', ()=>{
     // set map height
-    utils.setMapHeight();
+    utils.setMainRowHeight();
 });

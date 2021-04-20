@@ -50,6 +50,7 @@ var dataLoader={
         let keys=[];
         await dataLoader.loadDataModel().then(
             (dm)=>{
+                dataLoader.dataModel=dm;
                 keys=dataLoader.getAllKeys(dm);
             }
         );
