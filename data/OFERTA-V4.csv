@@ -1,6 +1,6 @@
 ﻿geocode,Municipio,value
-250010,Água Branca,0.73
-250020,Aguiar,0.52
+250010,Água Branca,0,73
+250020,Aguiar,0,52
 250030,Alagoa Grande,0.83
 250040,Alagoa Nova,0.87
 250050,Alagoinha,0.81
@@ -188,8 +188,8 @@
 251450,São José de Piranhas,0.83
 251455,São José de Princesa,0.84
 251460,São José do Bonfim,0.95
-251465,São José do Brejo do Cruz,0.68
-251470,São José do Sabugi,0.67
+251465,São José do Brejo do Cruz,0,68
+251470,São José do Sabugi,0,67
 251480,São José dos Cordeiros,0.95
 251445,São José dos Ramos,0.84
 251490,São Mamede,0.36
