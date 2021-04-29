@@ -8,7 +8,7 @@ var mainMap={
     info:L.control(),
 
     init:()=>{
-        mainMap.map = L.map('mainmap').setView([-23, -45], 8);
+        mainMap.map = L.map('mainmap').setView([-6.931510544942377, -37.276561132018195], 8);
 
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
             maxZoom: 18,
