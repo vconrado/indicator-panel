@@ -115,7 +115,7 @@ var mainMap={
     },
 
     loadGeojson: async ()=>{
-        const response = await fetch("data/rm-vale.geojson");
+        const response = await fetch("data/munis-PB.geojson");
         const data = await response.json();
         mainMap.geojson = data;
         mainMap.renewMainLayer(data);
