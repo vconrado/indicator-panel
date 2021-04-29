@@ -30,6 +30,8 @@ var mainMap={
      * @param {Array} values, An array with the geocode and new values for the "indicator" attribute
      */
     updateMainLayer:(csv)=>{
+        console.log(csv)
+        console.log(mainMap.geojson)
         mainMap.geojson.features.forEach(
             (f)=>{
                 let geocode=f.properties["gc"];
